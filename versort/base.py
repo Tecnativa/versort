@@ -14,19 +14,19 @@ class VersionSorterABC(ABC):
 
         ```python
         class MySorter(VersionSorterABC)
-            def _sorter(self) -> CallableThatReturnsSortable:
+            def sorter(self) -> CallableThatReturnsSortable:
                 return my_parser
         ```
     """
 
     @abstractmethod
-    def _sorter(self) -> CallableThatReturnsSortable:
+    def sorter(self) -> CallableThatReturnsSortable:
         """Return custom sorter callable.
 
         The callable must accept a `str` as input and return anything that
         allows being sorted by comparing it using `<`.
 
-        Override this in subclasses.
+        You **must** override this method in subclasses.
         """
 
     def sort(self, *versions: str, reverse: bool = False) -> List[str]:
@@ -39,7 +39,7 @@ class VersionSorterABC(ABC):
             reverse:
                 Whether the order must be reversed.
         """
-        return sorted(versions, key=self._sorter(), reverse=reverse)
+        return sorted(versions, key=self.sorter(), reverse=reverse)
 
 
 def get_sorter(algorithm: str) -> VersionSorterClass:
@@ -53,8 +53,7 @@ def get_sorter(algorithm: str) -> VersionSorterClass:
             - `"SemVer"`
 
     Raises:
-        ValueError:
-            If the sorter you want does not exist.
+        ValueError: If the sorter you want does not exist.
 
     Returns:
         The corresponding sorter class.

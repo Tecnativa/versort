@@ -6,5 +6,8 @@ from ..typing_extra import CallableThatReturnsSortable
 
 
 class SemverSorter(VersionSorterABC):
-    def _sorter(self) -> CallableThatReturnsSortable:
+    """SemVer sorter class."""
+
+    def sorter(self) -> CallableThatReturnsSortable:
+        """Return version object, sortable for SemVer."""
         return VersionInfo.parse
