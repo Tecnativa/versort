@@ -9,7 +9,7 @@ license = "BOOST-1.0"
 versort = "versort.cli:VerSortApp.run"
 
 [tool.poetry.dependencies]
-python = "^3.6.1"
+python = "^3.8"
 packaging = "^20.7"
 plumbum = "^1.6.9"
 semver = "^2.13.0"
