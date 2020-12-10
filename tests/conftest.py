@@ -1,4 +1,5 @@
 import io
+import os
 import sys
 from collections import namedtuple
 from pathlib import Path
@@ -26,7 +27,7 @@ def case_tester(monkeypatch, capsys):
         # CLI call, direct order, arguments
         VerSortApp.run(["versort", sorter_name, *case.input], exit=False)
         result = capsys.readouterr()
-        assert result.out == "\n".join(case.output) + "\n"
+        assert result.out == os.linesep.join(case.output) + "\n"
         assert not result.err
         # CLI call, inverse order, stdin, custom separator
         with monkeypatch.context() as patcher:
