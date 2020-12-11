@@ -3,7 +3,10 @@ name = "versort"
 version = "0.1.0"
 description = "Sort versions according to different versioning schemas"
 authors = ["Jairo Llopis <jairo.llopis@tecnativa.com>"]
-license = "BOOST-1.0"
+license = "BSL-1.0"
+homepage = "https://versort.readthedocs.io/"
+repository = "https://github.com/Tecnativa/versort"
+readme = "README.md"
 
 [tool.poetry.scripts]
 versort = "versort.cli:VerSortApp.run"
