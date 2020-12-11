@@ -40,6 +40,8 @@ print(sorter.sort("v1", "2a1", "2"))
 
 ### CLI
 
+You can call `versort` directly, or as a Python module with `python -m versort`.
+
 ```sh
 ➤ echo 2 2a1 v1 | versort --stdin pep440
 v1
@@ -54,8 +56,6 @@ v1
 ➤ versort --first pep440 2 2a1 v1
 v1
 
-➤ versort --reverse --first pep440 2 2a1 v1
+➤ python -m versort --reverse --first pep440 2 2a1 v1
 2
 ```
-
-You can also call `versort` as a Python module with `python -m versort`.
