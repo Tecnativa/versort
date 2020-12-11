@@ -1,5 +1,6 @@
 import io
 import os
+import runpy
 import sys
 from collections import namedtuple
 from pathlib import Path
@@ -27,26 +28,29 @@ def case_tester(monkeypatch, capsys):
         # CLI call, direct order, arguments
         VerSortApp.run(["versort", sorter_name, *case.input], exit=False)
         result = capsys.readouterr()
-        assert result.out == os.linesep.join(case.output) + "\n"
+        assert result.out.rstrip() == os.linesep.join(case.output)
         assert not result.err
         # CLI call, inverse order, stdin, custom separator
         with monkeypatch.context() as patcher:
             patcher.setattr(sys, "stdin", io.StringIO(" ".join(case.input)))
             VerSortApp.run(["versort", "-ris|", sorter_name], exit=False)
         result = capsys.readouterr()
-        assert result.out == "|".join(reverse_output) + "\n"
+        assert result.out.rstrip() == "|".join(reverse_output)
         assert not result.err
         # CLI call, first element, stdin
         with monkeypatch.context() as patcher:
             patcher.setattr(sys, "stdin", io.StringIO(" ".join(case.input)))
             VerSortApp.run(["versort", "--stdin", "--first", sorter_name], exit=False)
         result = capsys.readouterr()
-        assert result.out == case.output[0] + "\n"
+        assert result.out.rstrip() == case.output[0]
         assert not result.err
-        # CLI call, last element, arguments
-        VerSortApp.run(["versort", "-fr", sorter_name, *case.input], exit=False)
+        # CLI call as python module, last element, arguments
+        with monkeypatch.context() as patcher:
+            patcher.setattr(sys, "argv", [sys.argv[0], "-fr", sorter_name, *case.input])
+            with pytest.raises(SystemExit, match=r"^0$"):
+                runpy.run_module("versort", alter_sys=True)
         result = capsys.readouterr()
-        assert result.out == case.output[-1] + "\n"
+        assert result.out.rstrip() == case.output[-1]
         assert not result.err
 
     return _inner

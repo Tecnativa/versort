@@ -1,6 +1,9 @@
 # VerSort
 
 ![License](https://img.shields.io/github/license/Tecnativa/versort)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/versort)
+![PyPI](https://img.shields.io/pypi/v/versort)
+[![codecov](https://codecov.io/gh/Tecnativa/versort/branch/master/graph/badge.svg?token=1gDyBgOuPr)](https://codecov.io/gh/Tecnativa/versort)
 
 Sort versions according to different versioning schemas.
 

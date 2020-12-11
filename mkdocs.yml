@@ -6,12 +6,14 @@ repo_name: Tecnativa/versort
 
 nav:
   - Overview: "index.md"
+  - Contributing: "CONTRIBUTING.md"
   - Reference:
       - base: "reference/base.md"
       - cli: "reference/cli.md"
       - sorters:
           - pep440: "reference/sorters/pep440.md"
           - semver: "reference/sorters/semver.md"
+      - typing_extra: "typing_extra.md"
 
 theme:
   name: "material"
