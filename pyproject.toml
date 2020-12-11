@@ -19,6 +19,7 @@ plumbum = "^1.6.9"
 semver = "^2.13.0"
 mkdocstrings = {version = "^0.13.6", optional = true}
 mkdocs-material = {version = "^6.1.7", optional = true}
+GitPython = "^3.1.11"
 
 [tool.poetry.extras]
 docs = ["mkdocstrings", "mkdocs-material"]

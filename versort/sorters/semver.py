@@ -8,12 +8,12 @@ See the [SemVer spec](https://semver.org/).
 from semver import VersionInfo
 
 from ..base import VersionSorterABC
-from ..typing_extra import CallableThatReturnsSortable
+from ..typing_extra import CallableThatReturnsVersionObject
 
 
 class SemverSorter(VersionSorterABC):
     """SemVer sorter class."""
 
-    def sorter(self) -> CallableThatReturnsSortable:
+    def parser(self) -> CallableThatReturnsVersionObject:
         """Return version parsing function, suitable for SemVer."""
         return VersionInfo.parse

@@ -9,15 +9,17 @@ if TYPE_CHECKING:  # pragma: no cover
     from .base import VersionSorterABC
 
 
-class Sortable(Protocol):
+class VersionObject(Protocol):
     """Anything that can be sorted."""
+
+    major: Any
 
     def __lt__(self, __other: Any) -> bool:  # pragma: no cover
         ...
 
 
-CallableThatReturnsSortable = Callable[[str], Sortable]
-"""Anything that, returns a [Sortable][versort.typing_extra.Sortable] when called with a `str`."""
+CallableThatReturnsVersionObject = Callable[[str], VersionObject]
+"""Anything that, returns a [VersionObject][versort.typing_extra.VersionObject] when called with a `str`."""
 
 VersionSorterClass = Type["VersionSorterABC"]
 """A class that inherits from [VersionSorterABC][versort.base.VersionSorterABC]."""
