@@ -1,0 +1,38 @@
+site_name: versort
+site_description: Library and command-line utility for sorting versions.
+site_url: https://versort.readthedocs.io/
+repo_url: https://github.com/Tecnativa/versort
+repo_name: Tecnativa/versort
+
+nav:
+  - Overview: "index.md"
+  - Contributing: "CONTRIBUTING.md"
+  - Reference:
+      - base: "reference/base.md"
+      - cli: "reference/cli.md"
+      - sorters:
+          - pep440: "reference/sorters/pep440.md"
+          - semver: "reference/sorters/semver.md"
+      - typing_extra: "typing_extra.md"
+
+theme:
+  name: "material"
+
+extra_css:
+  - css/mkdocstrings.css
+
+markdown_extensions:
+  - admonition
+  - codehilite:
+      guess_lang: false
+  - pymdownx.superfences
+  - pymdownx.emoji
+  - pymdownx.magiclink
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+  - mkdocstrings:
+      watch:
+        - versort

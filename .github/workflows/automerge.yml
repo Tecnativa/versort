@@ -1,0 +1,34 @@
+name: automerge
+on:
+  pull_request:
+    types:
+      - edited
+      - labeled
+      - opened
+      - ready_for_review
+      - reopened
+      - synchronize
+      - unlabeled
+      - unlocked
+  pull_request_review:
+    types:
+      - submitted
+  status: {}
+jobs:
+  automerge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: automerge
+        uses: "pascalgn/automerge-action@v0.12.0"
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          MERGE_DELETE_BRANCH: "true"
+          MERGE_LABELS: "automerge"
+          MERGE_METHOD: "rebase"
+          MERGE_METHOD_LABELS:
+            automerge without rebase=merge,automerge with squash=squash
+          # Disable autorebasing PRs because they cannot retrigger checks
+          UPDATE_LABELS: "autoupdate"
+          UPDATE_METHOD: "rebase"
+          MERGE_RETRIES: 60
+          MERGE_RETRY_SLEEP: 10000
