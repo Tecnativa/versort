@@ -8,12 +8,12 @@ See the [PEP440 spec](https://www.python.org/dev/peps/pep-0440/).
 from packaging.version import parse
 
 from ..base import VersionSorterABC
-from ..typing_extra import CallableThatReturnsSortable
+from ..typing_extra import CallableThatReturnsVersionObject
 
 
 class PEP440Sorter(VersionSorterABC):
     """PEP440 sorter class."""
 
-    def sorter(self) -> CallableThatReturnsSortable:
+    def parser(self) -> CallableThatReturnsVersionObject:
         """Return version parsing function, suitable for PEP440."""
         return parse

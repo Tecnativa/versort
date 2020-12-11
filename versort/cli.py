@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 from plumbum import cli
 
-from . import __version__, get_sorter
+from . import __version__, get_sorter, git_tag_matches
 
 
 class VerSortApp(cli.Application):
@@ -17,16 +17,31 @@ class VerSortApp(cli.Application):
 
     VERSION = __version__
 
-    first = cli.Flag(["-f", "--first"], help="Print only first match")
-    reverse = cli.Flag(["-r", "--reverse"], help="Reverse order")
     separator = cli.SwitchAttr(
         ["-s", "--separator"],
         help="Separator used when printing sorted results; the default is a new line",
     )
-    stdin = cli.Flag(["-i", "--stdin"], help="Read tags from STDIN")
+
+    def print_results(self, *results: str):
+        """Print results from subcommands.
+
+        Args:
+            *results:
+                Strings to be printed to STDOUT.
+        """
+        print(*results, sep=os.linesep if self.separator is None else self.separator)
+
+
+@VerSortApp.subcommand("sort")
+class VerSortSortApp(cli.Application):
+    """Sort incoming versions."""
+
+    first = cli.Flag(["-f", "--first"], help="Print only first match")
+    reverse = cli.Flag(["-r", "--reverse"], help="Reverse order")
+    stdin = cli.Flag(["-i", "--stdin"], help="Read versions from STDIN")
 
     def main(self, algorithm: str, *versions: str):
-        """Main entrypoint for CLI executions.
+        """Sort versions from CLI.
 
         Args:
             algorithm:
@@ -43,8 +58,57 @@ class VerSortApp(cli.Application):
         if self.first:
             print(sorted_versions[0])
             return
-        separator = os.linesep if self.separator is None else self.separator
-        print(*sorted_versions, sep=separator)
+        self.parent.print_results(*sorted_versions)
+
+
+@VerSortApp.subcommand("git-tag-matches")
+class VerSortGitTagMatchesApp(cli.Application):
+    """Format versions that match a git repo's `HEAD`.
+
+    Examples:
+
+        Suppose you have a repo checked out in `master` and tagged with `1.2.3`
+        using SemVer.
+
+        You can use this command to produce an output like this:
+    """
+
+    branch = cli.Flag(["-b", "--branch"], help="Consider `HEAD`'s ref a valid match")
+    latest = cli.SwitchAttr(
+        ["-l", "--latest"],
+        default="",
+        help="Add this tag to matches if `HEAD` is the latest tag",
+    )
+    major = cli.Flag(
+        ["-m", "--major"],
+        help="Add `x` to matches, if `HEAD` is tagged with `x.y.z` and it's the latest tag in the `x` series",
+    )
+    pattern = cli.SwitchAttr(
+        ["-p", "--pattern"], default="%s", help="Pattern for results"
+    )
+
+    def main(self, algorithm: str, repo_root: cli.ExistingDirectory = "."):
+        """Get git tag matches from CLI.
+
+        Args:
+            algorithm:
+                Used to obtain the sorter, passed to
+                [get_sorter][versort.base.get_sorter].
+
+            repo_root:
+                Where the git repo to be used is found.
+        """
+        sorter = get_sorter(algorithm)()
+        self.parent.print_results(
+            *git_tag_matches(
+                sorter,
+                repo_root,
+                branch=self.branch,
+                latest=self.latest,
+                major=self.major,
+                pattern=self.pattern,
+            ),
+        )
 
 
 # Add --help-all results to docs
